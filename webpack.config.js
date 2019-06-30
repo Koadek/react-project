@@ -7,7 +7,6 @@ module.exports = {
     path: path.join(__dirname, 'build'),
   },
   devServer: {
-    port: 3000,
     overlay: {
       warnings: true,
       errors: true,
@@ -17,6 +16,8 @@ module.exports = {
     },
     contentBase: path.join(__dirname, 'public'),
     hot: true,
+    port: 8081,
+    host: '127.0.0.1',
   },
   module: {
     rules: [
