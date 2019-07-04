@@ -1,6 +1,13 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import QuestionChoice from './QuestionChoice';
+import {
+  QuestionCardStyle,
+  DeleteBtnBox,
+  DeleteBtn,
+  MyQuestion,
+  ChoiceLengthBtn,
+} from './components';
 
 class UnconnectedQuestionCard extends Component {
   handleNewQuestion = evt => {
@@ -15,17 +22,26 @@ class UnconnectedQuestionCard extends Component {
     this.props.dispatch({ type: 'addChoice', idx: this.props.questionId });
   };
 
+  removeCard = () => {
+    this.props.dispatch({ type: 'removeCard', idx: this.props.questionId });
+  };
+
   render() {
     return (
-      <div className="form new-question">
-        <div className="answers-qa">
+      <QuestionCardStyle>
+        {this.props.questionId > 0 && (
+          <DeleteBtnBox>
+            <DeleteBtn onClick={this.removeCard}>X</DeleteBtn>
+          </DeleteBtnBox>
+        )}
+        <MyQuestion>
           <label>Question {this.props.questionId}</label>
           <input
             type="text"
             onChange={this.handleNewQuestion}
             value={this.props.myCards.cards[this.props.questionId].question}
           />
-        </div>
+        </MyQuestion>
         <div>
           {this.props.myCards.cards[this.props.questionId].choices.map(
             (choice, idx) => (
@@ -37,10 +53,12 @@ class UnconnectedQuestionCard extends Component {
             )
           )}
         </div>
-        <div className="add-choice">
-          <button onClick={this.addChoice}>add choice</button>
-        </div>
-      </div>
+        <ChoiceLengthBtn>
+          <button type="button" onClick={this.addChoice}>
+            add choice
+          </button>
+        </ChoiceLengthBtn>
+      </QuestionCardStyle>
     );
   }
 }

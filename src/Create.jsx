@@ -1,12 +1,21 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import QuestionCard from './QuestionCard.jsx';
-import { Link } from 'react-router-dom';
+import {
+  Deck,
+  Title,
+  Quiz,
+  CardTitle,
+  Form,
+  AddCard,
+  Submit,
+} from './components';
 
 class UnconnectedCreate extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
     this.props.dispatch({ type: 'submit' });
+    this.props.push('/');
   };
 
   handleNewTitle = evt => {
@@ -19,30 +28,27 @@ class UnconnectedCreate extends Component {
 
   render() {
     return (
-      <div className="decks quiz">
-        <div className="quiz-card question-card">
-          <div className="quiz-title">Create a deck</div>
-          <form onSubmit={this.handleSubmit} className="answers">
-            <div className="form answers-qa">
+      <Deck>
+        <Quiz>
+          <CardTitle>Create a deck</CardTitle>
+          <Form onSubmit={this.handleSubmit}>
+            <Title>
               <label>Title</label>
               <input
                 onChange={this.handleNewTitle}
                 value={this.props.newTitle}
               />
-            </div>
+            </Title>
             {this.props.myCards.cards.map((question, idx) => (
               <QuestionCard questionId={idx} />
             ))}
-            <button className="add-card" onClick={this.addCard}>
+            <AddCard type="button" onClick={this.addCard}>
               Add card
-            </button>
-            <Link className="choices" to="/">
-              {' '}
-              <input className="choices" type="submit" value="Submit" />
-            </Link>
-          </form>
-        </div>
-      </div>
+            </AddCard>
+            <Submit className="choices" type="submit" value="Submit" />
+          </Form>
+        </Quiz>
+      </Deck>
     );
   }
 }

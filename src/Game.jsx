@@ -1,12 +1,26 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Deck,
+  Quiz,
+  CardTitle,
+  ReportCard,
+  Emoji,
+  Results,
+  ResultQuestion,
+  MyAnswer,
+  ChoiceBtn,
+} from './components';
 
 class UnconnectedGame extends Component {
+  componentDidMount() {
+    this.props.dispatch({ type: 'gameStart' });
+  }
   handleAnswer = answer => {
     this.props.dispatch({ type: 'questionAnswered', answer: answer });
   };
   render() {
-    this.props.dispatch({ type: 'gameStart' });
     const card = this.props.game.cards;
 
     if (this.props.questionNumber >= card.length) {
@@ -26,50 +40,44 @@ class UnconnectedGame extends Component {
       };
 
       return (
-        <div className="decks quiz">
-          <div className="quiz-card question-card">
-            <div className="quiz-title">Results</div>
-            <div className="results">
-              <div className="emoji">{resultEmoji()}</div>
+        <Deck>
+          <Quiz>
+            <CardTitle>Results</CardTitle>
+            <ReportCard>
+              <Emoji>{resultEmoji()}</Emoji>
               {card.map((result, idx) => (
-                <div>
-                  <div className="result-question">{result.question}</div>
+                <Results>
+                  <ResultQuestion>{result.question}</ResultQuestion>
                   <div>Answer: {result.answer}</div>
-                  <div
-                    className={
-                      this.props.myAnswers[idx] === result.answer
-                        ? 'result-good-answer'
-                        : 'result-bad-answer'
-                    }
+                  <MyAnswer
+                    myAnswer={this.props.myAnswers[idx] === result.answer}
                   >
                     Your Answer: {this.props.myAnswers[idx]}
-                  </div>
-                </div>
+                  </MyAnswer>
+                </Results>
               ))}
-            </div>
-          </div>
-        </div>
+            </ReportCard>
+            <Link className="choices link" to={'/quiz/' + this.props.game.id}>
+              Play again
+            </Link>
+          </Quiz>
+        </Deck>
       );
     }
 
     return (
-      <div className="decks quiz">
-        <div className="quiz-card question-card">
-          <div className="quiz-title">
-            {card[this.props.questionNumber].question}
-          </div>
-          <div className="answers">
+      <Deck>
+        <Quiz>
+          <CardTitle>{card[this.props.questionNumber].question}</CardTitle>
+          <Quiz>
             {card[this.props.questionNumber].choices.map(answer => (
-              <button
-                className="choices"
-                onClick={() => this.handleAnswer(answer)}
-              >
+              <ChoiceBtn onClick={() => this.handleAnswer(answer)}>
                 {answer}
-              </button>
+              </ChoiceBtn>
             ))}
-          </div>
-        </div>
-      </div>
+          </Quiz>
+        </Quiz>
+      </Deck>
     );
   }
 }

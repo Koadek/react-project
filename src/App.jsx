@@ -15,8 +15,8 @@ let renderGame = routerData => {
   return <Game gameId={gameId} />;
 };
 
-let renderCreate = () => {
-  return <Create />;
+let renderCreate = routerData => {
+  return <Create push={routerData.history.push} />;
 };
 
 function App() {

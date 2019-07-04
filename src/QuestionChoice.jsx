@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { MyQuestion, ChoiceLengthBtn, CustomChoices } from './components';
 
 class UnconnectedQuestionChoice extends Component {
   handleNewAnswer = () => {
@@ -11,36 +12,54 @@ class UnconnectedQuestionChoice extends Component {
   };
 
   handleNewChoice = evt => {
-    this.props.dispatch[
-      {
-        type: 'setChoice',
-        text: evt.target.value,
-        choiceId: this.props.choiceId,
-        questionId: this.props.questionId,
-      }
-    ];
+    this.props.dispatch({
+      type: 'setChoice',
+      text: evt.target.value,
+      choiceId: this.props.choiceId,
+      questionId: this.props.questionId,
+    });
+  };
+
+  removeChoice = () => {
+    this.props.dispatch({
+      type: 'removeChoice',
+      questionId: this.props.questionId,
+      choiceId: this.props.choiceId,
+    });
   };
 
   render() {
     return (
-      <div className="answers-qa">
-        <div className="custom-answers">
+      <MyQuestion>
+        <CustomChoices>
           <label>Choice {this.props.choiceId}</label>
           <label>
             Mark as answer:
             <input
               type="checkbox"
-              checked={this.props.myCards.cards[this.props.questionId].answer}
+              checked={
+                this.props.myCards.cards[this.props.questionId].answer ===
+                this.props.myCards.cards[this.props.questionId].choices[
+                  this.props.choiceId
+                ]
+              }
               onChange={this.handleNewAnswer}
             />
           </label>
-        </div>
+        </CustomChoices>
         <input
           type="text"
           onChange={this.handleNewChoice}
           value={this.props.choice}
         />
-      </div>
+        {this.props.choiceId > 1 && (
+          <ChoiceLengthBtn>
+            <button type="button" onClick={this.removeChoice}>
+              remove choice
+            </button>
+          </ChoiceLengthBtn>
+        )}
+      </MyQuestion>
     );
   }
 }

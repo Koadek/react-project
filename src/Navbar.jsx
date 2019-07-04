@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import React, { Component } from 'react';
+import { NavbarStyle, SearchBar } from './components';
 
 class UnconnectedNavbar extends Component {
   handleQuery = evt => {
@@ -13,13 +14,12 @@ class UnconnectedNavbar extends Component {
 
   render() {
     return (
-      <div id="navbar">
+      <NavbarStyle>
         <Link to={'/'} className="link" id="logo">
           GOT IT!
         </Link>
-        <input
+        <SearchBar
           type="text"
-          id="search"
           onChange={this.handleQuery}
           value={this.props.query}
         />
@@ -29,7 +29,7 @@ class UnconnectedNavbar extends Component {
         <Link className="link" to={'/create'} onClick={this.clearDeck}>
           Create deck
         </Link>
-      </div>
+      </NavbarStyle>
     );
   }
 }
